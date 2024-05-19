@@ -1,29 +1,37 @@
 const express = require("express");
 const cors = require("cors");
-require("./db/config");
-const User = require("./db/User");
+require("./db/config"); // Ensure this file sets up your MongoDB connection
+const User = require("./db/User"); // Ensure this is your User model
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+// Registration route
 app.post("/register", async (req, resp) => {
   let user = new User(req.body);
   let result = await user.save();
   result = result.toObject();
-  delete result.password;
-  resp.send(result);
+  delete result.password; // Remove the password field from the result
+  resp.send(result); // Send the user object back to the client
 });
 
+// Login route
 app.post("/login", async (req, resp) => {
   if (req.body.email && req.body.password) {
+    // Find the user by email and password, excluding the password field in the result
     let user = await User.findOne(req.body).select("-password");
     if (user) {
-      resp.send(user);
+      resp.send(user); // Send the user object back to the client if found
     } else {
-      resp.send({ result: "No User Found" });
+      resp.send({ result: "No User Found" }); // Send error message if user is not found
     }
   } else {
-    resp.send({ result: "Please provide necessary credentials" });
+    resp.send({ result: "Please provide necessary credentials" }); // Send error message if email or password is missing
   }
 });
-app.listen(5000);
+
+// Start the server on port 5000
+app.listen(5000, () => {
+  console.log("Server is running on port 5000");
+});
