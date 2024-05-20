@@ -54,13 +54,13 @@ app.post("/login", async (req, resp) => {
 
 //Product Routes
 
-app.post("/add-product", async (req, resp) => {
+app.post("/add-product", verifyTokenMiddleware, async (req, resp) => {
   let product = new Product(req.body);
   let result = await product.save();
   resp.send(result);
 });
 
-app.get("/products", async (req, resp) => {
+app.get("/products", verifyTokenMiddleware, async (req, resp) => {
   let products = await Product.find();
   if (products.length > 0) {
     resp.send(products);
@@ -68,6 +68,21 @@ app.get("/products", async (req, resp) => {
     resp.send({ result: "No products found" });
   }
 });
+
+function verifyTokenMiddleware(req, resp, next) {
+  let token = req.headers["authorization"];
+  if (token) {
+    token = token?.split(" ")[1];
+    Jwt.verify(token, jwtKey, (err, valid) => {
+      if (err) {
+        resp.status(401).send({ result: "Please Provide Valid Token" });
+      }
+    });
+  } else {
+    resp.status(403).send("Please add token with header");
+  }
+  next();
+}
 // Start the server on port 5000
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
