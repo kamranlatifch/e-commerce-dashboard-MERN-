@@ -4,6 +4,8 @@ require("./db/config"); // Ensure this file sets up your MongoDB connection
 const User = require("./db/User"); // Ensure this is your User model
 const Product = require("./db/Product"); // Ensure this is your User model
 
+const Jwt = require("jsonwebtoken");
+const jwtKey = "e-comm";
 const app = express();
 
 app.use(express.json());
@@ -15,7 +17,17 @@ app.post("/register", async (req, resp) => {
   let result = await user.save();
   result = result.toObject();
   delete result.password; // Remove the password field from the result
-  resp.send(result); // Send the user object back to the client
+  if (result) {
+    Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+      if (err) {
+        resp.send({ result: "Something went wrong" });
+      } else {
+        resp.send({ result, auth: token });
+      }
+    });
+  } else {
+    resp.send({ result: "No User Found" }); // Send error message if user is not found
+  }
 });
 
 // Login route
@@ -24,7 +36,14 @@ app.post("/login", async (req, resp) => {
     // Find the user by email and password, excluding the password field in the result
     let user = await User.findOne(req.body).select("-password");
     if (user) {
-      resp.send(user); // Send the user object back to the client if found
+      Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
+        if (err) {
+          resp.send({ result: "Something went wrong" });
+        } else {
+          resp.send({ user, auth: token });
+        }
+      });
+      // resp.send(user); // Send the user object back to the client if found
     } else {
       resp.send({ result: "No User Found" }); // Send error message if user is not found
     }
