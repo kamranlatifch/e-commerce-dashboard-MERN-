@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 require("./db/config"); // Ensure this file sets up your MongoDB connection
 const User = require("./db/User"); // Ensure this is your User model
+const Product = require("./db/Product"); // Ensure this is your User model
+
 const app = express();
 
 app.use(express.json());
@@ -31,6 +33,13 @@ app.post("/login", async (req, resp) => {
   }
 });
 
+//Product Routes
+
+app.post("/add-product", async (req, resp) => {
+  let product = new Product(req.body);
+  let result = await product.save();
+  resp.send(result);
+});
 // Start the server on port 5000
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
