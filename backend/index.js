@@ -71,18 +71,26 @@ app.get("/products", verifyTokenMiddleware, async (req, resp) => {
 
 function verifyTokenMiddleware(req, resp, next) {
   let token = req.headers["authorization"];
+  console.log("Received Token:", token); // Debugging line
+
   if (token) {
-    token = token?.split(" ")[1];
+    token = token.split(" ")[1];
+    console.log("Processed Token:", token); // Debugging line
+
     Jwt.verify(token, jwtKey, (err, valid) => {
       if (err) {
-        resp.status(401).send({ result: "Please Provide Valid Token" });
+        console.log("Token verification error:", err); // Debugging line
+        return resp.status(401).send({ result: "Please Provide Valid Token" });
+      } else {
+        console.log("Token is valid"); // Debugging line
+        next();
       }
     });
   } else {
-    resp.status(403).send("Please add token with header");
+    return resp.status(403).send("Please add token with header");
   }
-  next();
 }
+
 // Start the server on port 5000
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
