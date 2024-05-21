@@ -69,6 +69,12 @@ app.get("/products", verifyTokenMiddleware, async (req, resp) => {
   }
 });
 
+app.delete("/product/:id", async (req, resp) => {
+  const result = await Product.deleteOne({ _id: req.params.id });
+
+  resp.send(result);
+});
+
 function verifyTokenMiddleware(req, resp, next) {
   let token = req.headers["authorization"];
   console.log("Received Token:", token); // Debugging line
