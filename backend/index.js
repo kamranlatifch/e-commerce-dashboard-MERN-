@@ -69,7 +69,7 @@ app.get("/products", verifyTokenMiddleware, async (req, resp) => {
   }
 });
 
-app.delete("/product/:id", async (req, resp) => {
+app.delete("/product/:id", verifyTokenMiddleware, async (req, resp) => {
   const result = await Product.deleteOne({ _id: req.params.id });
 
   resp.send(result);
