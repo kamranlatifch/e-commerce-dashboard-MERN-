@@ -69,6 +69,15 @@ app.get("/products", verifyTokenMiddleware, async (req, resp) => {
   }
 });
 
+app.get("product/:id", async (req, resp) => {
+  let result = await Product.findOne({ _id: req.params.id });
+  if (result) {
+    resp.send(result);
+  } else {
+    resp.send({ result: "No record Found"});
+  }
+});
+
 app.delete("/product/:id", verifyTokenMiddleware, async (req, resp) => {
   const result = await Product.deleteOne({ _id: req.params.id });
 
