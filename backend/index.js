@@ -78,6 +78,19 @@ app.get("/product/:id", async (req, resp) => {
   }
 });
 
+app.put("/product/:id", async (req, resp) => {
+  let result = await Product.updateOne(
+    {
+      // jiski base pr hamein update krwana hay
+      _id: req.params.id,
+    },
+    {
+      // Jo data update krna woh rhy ga
+      $set: req.body,
+    }
+  );
+  resp.send(result);
+});
 app.delete("/product/:id", verifyTokenMiddleware, async (req, resp) => {
   const result = await Product.deleteOne({ _id: req.params.id });
 
