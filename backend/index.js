@@ -20,7 +20,7 @@ app.post("/register", async (req, resp) => {
   if (result) {
     Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
       if (err) {
-        resp.send({ result: "Something went wrong" });
+        resp.send({ result: "Something Went wrong" });
       } else {
         resp.send({ result, auth: token });
       }
