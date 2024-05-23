@@ -48,7 +48,7 @@ app.post("/login", async (req, resp) => {
       resp.send({ result: "No User Found" }); // Send error message if user is not found
     }
   } else {
-    resp.send({ result: "Please provide necessary credentials" }); // Send error message if email or password is missing
+    resp.send({ result: "Please Provide necessary credentials" }); // Send error message if email or password is missing
   }
 });
 
