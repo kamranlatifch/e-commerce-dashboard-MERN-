@@ -108,7 +108,7 @@ function verifyTokenMiddleware(req, resp, next) {
     Jwt.verify(token, jwtKey, (err, valid) => {
       if (err) {
         console.log("Token verification error:", err); // Debugging line
-        return resp.status(401).send({ result: "Please Provide Valid Token" });
+        return resp.status(401).send({ result: "Please Provide a Valid Token" });
       } else {
         console.log("Token is valid"); // Debugging line
         next();
