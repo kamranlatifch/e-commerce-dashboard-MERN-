@@ -74,7 +74,7 @@ app.get("/product/:id", async (req, resp) => {
   if (result) {
     resp.send(result);
   } else {
-    resp.send({ result: "No record Found" });
+    resp.send({ result: "No Record Found" });
   }
 });
 
