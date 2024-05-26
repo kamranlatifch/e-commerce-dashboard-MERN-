@@ -26,7 +26,7 @@ app.post("/register", async (req, resp) => {
       }
     });
   } else {
-    resp.send({ result: "No User Found" }); // Send error message if user is not found
+    resp.send({ result: "No User F Found" }); // Send error message if user is not found
   }
 });
 
