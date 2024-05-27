@@ -97,6 +97,23 @@ app.delete("/product/:id", verifyTokenMiddleware, async (req, resp) => {
   resp.send(result);
 });
 
+app.get("/search/:key", async (req, resp) => {
+  let result = await Product.find({
+    $or: [
+      {
+        name: { $regex: req.params.key },
+      },
+      {
+        company: { $regex: req.params.key },
+      },
+      {
+        category: { $regex: req.params.key },
+      },
+    ],
+  });
+  resp.send(result);
+});
+
 function verifyTokenMiddleware(req, resp, next) {
   let token = req.headers["authorization"];
   console.log("Received Token:", token); // Debugging line
