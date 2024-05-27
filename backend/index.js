@@ -20,13 +20,13 @@ app.post("/register", async (req, resp) => {
   if (result) {
     Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
       if (err) {
-        resp.send({ result: "Something went wrong" });
+        resp.send({ result: "Something Went Wrong" });
       } else {
         resp.send({ result, auth: token });
       }
     });
   } else {
-    resp.send({ result: "No User Found" }); // Send error message if user is not found
+    resp.send({ result: "No User F Found" }); // Send error message if user is not found
   }
 });
 
@@ -38,7 +38,7 @@ app.post("/login", async (req, resp) => {
     if (user) {
       Jwt.sign({ user }, jwtKey, { expiresIn: "2h" }, (err, token) => {
         if (err) {
-          resp.send({ result: "Something went wrong" });
+          resp.send({ result: "Something Went Wrong" });
         } else {
           resp.send({ user, auth: token });
         }
@@ -48,7 +48,7 @@ app.post("/login", async (req, resp) => {
       resp.send({ result: "No User Found" }); // Send error message if user is not found
     }
   } else {
-    resp.send({ result: "Please provide necessary credentials" }); // Send error message if email or password is missing
+    resp.send({ result: "Please Provide Necessary Credentials" }); // Send error message if email or password is missing
   }
 });
 
@@ -74,7 +74,7 @@ app.get("/product/:id", async (req, resp) => {
   if (result) {
     resp.send(result);
   } else {
-    resp.send({ result: "No record Found" });
+    resp.send({ result: "No Record Found" });
   }
 });
 
@@ -125,7 +125,7 @@ function verifyTokenMiddleware(req, resp, next) {
     Jwt.verify(token, jwtKey, (err, valid) => {
       if (err) {
         console.log("Token verification error:", err); // Debugging line
-        return resp.status(401).send({ result: "Please Provide Valid Token" });
+        return resp.status(401).send({ result: "Please Provide a Valid Token" });
       } else {
         console.log("Token is valid"); // Debugging line
         next();
