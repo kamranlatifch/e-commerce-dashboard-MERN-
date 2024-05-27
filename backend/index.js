@@ -60,12 +60,44 @@ app.post("/add-product", verifyTokenMiddleware, async (req, resp) => {
   resp.send(result);
 });
 
+// app.get("/products", verifyTokenMiddleware, async (req, resp) => {
+//   let products = await Product.find();
+//   if (products.length > 0) {
+//     resp.send(products);
+//   } else {
+//     resp.send({ result: "No products found" });
+//   }
+// });
 app.get("/products", verifyTokenMiddleware, async (req, resp) => {
-  let products = await Product.find();
-  if (products.length > 0) {
-    resp.send(products);
-  } else {
-    resp.send({ result: "No products found" });
+  try {
+    // Extract the search query parameter
+    const { search } = req.query;
+
+    // Create a search object to hold the search criteria
+    let searchCriteria = {};
+
+    // If the search parameter is provided, add it to the search criteria
+    if (search) {
+      const regex = { $regex: search, $options: "i" }; // case-insensitive regex search
+      searchCriteria = {
+        $or: [{ name: regex }, { company: regex }, { category: regex }],
+      };
+    }
+
+    // Find products based on search criteria
+    let products = await Product.find(searchCriteria);
+
+    // Send the response based on the results
+    if (products.length > 0) {
+      resp.send(products);
+    } else {
+      resp.send({ result: "No products found" });
+    }
+  } catch (error) {
+    // Handle any errors that occur during the search
+    resp
+      .status(500)
+      .send({ error: "An error occurred while searching for products." });
   }
 });
 
@@ -125,7 +157,9 @@ function verifyTokenMiddleware(req, resp, next) {
     Jwt.verify(token, jwtKey, (err, valid) => {
       if (err) {
         console.log("Token verification error:", err); // Debugging line
-        return resp.status(401).send({ result: "Please Provide a Valid Token" });
+        return resp
+          .status(401)
+          .send({ result: "Please Provide a Valid Token" });
       } else {
         console.log("Token is valid"); // Debugging line
         next();
