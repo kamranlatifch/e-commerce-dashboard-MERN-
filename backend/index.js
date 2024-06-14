@@ -67,7 +67,7 @@ app.post("/add-product", verifyTokenMiddleware, async (req, resp) => {
 //   } else {
 //     resp.send({ result: "No products found" });
 //   }
-// });
+
 app.get("/products", verifyTokenMiddleware, async (req, resp) => {
   try {
     // Extract the search query parameter
