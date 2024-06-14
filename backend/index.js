@@ -65,7 +65,6 @@ app.post("/add-product", verifyTokenMiddleware, async (req, resp) => {
 //   if (products.length > 0) {
 //     resp.send(products);
 //   } else {
-//   
 
 
 app.get("/products", verifyTokenMiddleware, async (req, resp) => {
