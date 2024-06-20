@@ -60,7 +60,7 @@ app.post("/add-product", verifyTokenMiddleware, async (req, resp) => {
   resp.send(result);
 });
 
-// app.get("/products", verifyTokenMiddleware, async (req, resp) => {
+// app.get("/products", verifyTokenMiddleware, async (req, 
 
 
 
